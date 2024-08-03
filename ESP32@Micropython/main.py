@@ -29,6 +29,12 @@ if __name__ == '__main__':
     uos.mount(vfs, "/sd")
     print(uos.listdir("/sd"))
 
-    f = open("sd/test.txt")
-    for _l in f.readlines():
-        print(_l)
+    for idx in range(10):
+        file_name = f"f{idx:03d}"
+        f = open("/sd/" + file_name, 'r')
+        data_str = f.readline()[1:-1]
+        data_tuple = eval(data_str)
+        print(data_tuple)
+        f.close()
+
+
