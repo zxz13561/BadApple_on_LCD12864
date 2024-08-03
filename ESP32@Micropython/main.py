@@ -20,15 +20,6 @@ lcd.cursor_home()
 lcd.print_line("LCD ON")
 time.sleep(1)
 
-
-def show_frame():
-    time.sleep(0.1)
-    while True:
-        # lcd.clean()
-        lcd.draw(frame_data)
-        time.sleep_ms(80)
-
-
 if __name__ == '__main__':
     print("Program Start")
 
@@ -38,7 +29,10 @@ if __name__ == '__main__':
             _recv = b''
             while uart.any():
                 _recv += uart.readline()
-                time.sleep_ms(10)
+                time.sleep_ms(5)
 
             print(len(_recv))
+            lcd.clean()
+            lcd.draw(_recv)
+            # time.sleep_ms(200)
             uart.write(b'REQ')
