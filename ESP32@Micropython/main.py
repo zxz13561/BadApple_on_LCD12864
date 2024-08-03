@@ -1,5 +1,7 @@
+import time
 import uos
 import machine
+from machine import Pin
 import sdcard
 
 # Assign chip select (CS) pin (and start it high)
@@ -28,8 +30,9 @@ spi_lcd = machine.SPI(2,
 
 
 class LCD12864(object):
-    def __init__(self, lcd_spi):
+    def __init__(self, lcd_spi, reset_pin):
         self.spi = lcd_spi
+        self.rst = Pin(reset_pin, Pin.OUT, Pin.PULL_DOWN)
 
     def send_bytes(self, comm_list):
         self.spi.write(bytearray(comm_list))
@@ -55,6 +58,13 @@ class LCD12864(object):
             self.send_char(ord(c))
 
     def lcd_init(self):
+        # Toggle reset pin
+        self.rst.value(0)
+        time.sleep_ms(50)
+        self.rst.value(1)
+        time.sleep_ms(50)
+
+        # Send init command
         self.send_command(0x30)
         self.send_command(0x0C)
         self.send_command(0x01)
@@ -92,7 +102,8 @@ if __name__ == '__main__':
     #     print(data_tuple)
     #     f.close()
 
-    lcd = LCD12864(spi_lcd)
+    lcd = LCD12864(spi_lcd, 22)
     lcd.lcd_init()
     lcd.cursor_home()
     lcd.print_line("Hello World!!")
+
