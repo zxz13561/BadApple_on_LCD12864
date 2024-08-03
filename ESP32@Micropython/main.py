@@ -126,8 +126,11 @@ if __name__ == '__main__':
 
     time.sleep(1)
     _tuples = []
-    for idx in range(10):
+    for idx in range(30):
         file_name = f"f{idx:03d}"
+        lcd.clean()
+        lcd.cursor_home()
+        lcd.print_line(f"Loading {idx}")
         f = open("/sd/" + file_name, 'r')
         data_str = f.readline()[1:-1]
         _tuples.append(eval(data_str))
