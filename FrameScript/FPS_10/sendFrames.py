@@ -13,7 +13,7 @@ import hex_arr8
 
 # Function by board type
 board_list = ["STM32F1", "ESP32"]
-board_type = board_list[0]
+board_type = board_list[1]
 
 # Init Serial
 port = "/dev/tty.usbserial-1120"
@@ -44,7 +44,7 @@ while True:
         # Record time usage
         time_usage.append(perf_counter() - tmr)
         tmr = perf_counter()
-        # print(f"{datetime.now()} Get board message: {recv.decode()}")
+        print(f"{datetime.now()} Get board message: {recv.decode()}")
 
         # Select frame file by index
         if f_idx < range_list[1]:
