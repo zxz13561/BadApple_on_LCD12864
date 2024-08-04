@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-#include "bad_apple.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,16 +64,22 @@ uint8_t RxFRAME[1024] = { 0 };
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
-static void MX_TIM1_Init(void);
 static void MX_USART3_UART_Init(void);
+static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void delay_us (uint16_t us) {
+	__HAL_TIM_SET_COUNTER(&htim1,0);
+	while (__HAL_TIM_GET_COUNTER(&htim1) < us);
+}
+
 void LCD_SEND_BYTE(uint8_t* bytes) {
   HAL_SPI_Transmit(&hspi1, bytes, 3, 5000);
+  delay_us(85);
 }
 
 void LCD_WRITE_COMMAND(uint8_t command_hex) {
@@ -167,8 +172,8 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
-  MX_TIM1_Init();
   MX_USART3_UART_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim1);
   HAL_UART_Receive_IT(&huart3, RxTempBuf, 1);
@@ -198,7 +203,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     if(TRANS_FLAG == 0) {
-      HAL_Delay(1);
+      // delay_us(10);
       uint8_t _req[] = "REQ";
       HAL_UART_Transmit(&huart3, _req, 3, 100);
       TRANS_FLAG = 1;
@@ -274,7 +279,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -310,7 +315,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 9-1;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
+  htim1.Init.Period = 65535-1;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;

@@ -23,7 +23,7 @@ tasks.json
                 "stm32f103c8_blue_pill.cfg",
                 
                 "-c",
-                "program build/F103_LCD.elf verify reset exit"
+                "program build/STM32F1@Cube.elf verify reset exit"
             ],
             "group": "build"
         }
