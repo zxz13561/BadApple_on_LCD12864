@@ -50,15 +50,15 @@ while True:
         if f_idx < range1:
             _f = hex_arr.all_frame[f_idx]
         elif f_idx < range2:
-            _f = hex_arr2.all_frame2[f_idx-range2]
+            _f = hex_arr2.all_frame2[f_idx - range2]
         elif f_idx < range3:
-            _f = hex_arr3.all_frame3[f_idx-range3]
+            _f = hex_arr3.all_frame3[f_idx - range3]
         elif f_idx < range4:
-            _f = hex_arr4.all_frame4[f_idx-range4]
+            _f = hex_arr4.all_frame4[f_idx - range4]
         elif f_idx < range5:
-            _f = hex_arr5.all_frame5[f_idx-range5]
+            _f = hex_arr5.all_frame5[f_idx - range5]
         elif f_idx < range6:
-            _f = hex_arr6.all_frame6[f_idx-range6]
+            _f = hex_arr6.all_frame6[f_idx - range6]
         else:
             # Finish and break
             break
