@@ -21,7 +21,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include "bad_apple.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -31,7 +34,12 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define FUNC_SET     0x30
+#define CLEAR_ALL    0x01
+#define ENTRY_SETUP  0x06
+#define DISPLAY_ALL  0x0F
+#define CURSOR_HOME  0x02
+#define DRAW_MODE    0x32
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -42,16 +50,22 @@
 /* Private variables ---------------------------------------------------------*/
 SPI_HandleTypeDef hspi1;
 
+TIM_HandleTypeDef htim1;
+
 UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
-
+uint8_t RxTempBuf[1] = "\0";
+uint8_t TRANS_FLAG = 0;
+int cnt = 0;
+uint8_t RxFRAME[1024] = { 0 }; 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
+static void MX_TIM1_Init(void);
 static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -59,7 +73,68 @@ static void MX_USART3_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void LCD_SEND_BYTE(uint8_t* bytes) {
+  HAL_SPI_Transmit(&hspi1, bytes, 3, 5000);
+}
 
+void LCD_WRITE_COMMAND(uint8_t command_hex) {
+  uint8_t _comm[3] = {
+    0xF8,
+    command_hex & 0xF0,
+    (command_hex << 4) & 0xF0
+  };
+  LCD_SEND_BYTE(_comm);
+}
+
+void LCD_WRITE_CHAR(uint8_t char_hex) {
+  uint8_t _comm[3] = {
+    0xFA,
+    char_hex & 0xF0,
+    (char_hex << 4) & 0xF0
+  };
+  LCD_SEND_BYTE(_comm);
+}
+
+void DrawFullScreen(uint8_t *p)
+{
+  int ygroup,x,y,i;
+  int temp;
+  int tmp;
+          
+  for(ygroup=0;ygroup<64;ygroup++) {
+    if(ygroup<32) {
+      x=0x80;
+      y=ygroup+0x80;
+    }
+    else {
+      x=0x88;
+      y=ygroup-32+0x80;    
+    }         
+    LCD_WRITE_COMMAND(0x36);      
+    LCD_WRITE_COMMAND(y);
+    LCD_WRITE_COMMAND(x);
+    LCD_WRITE_COMMAND(0x32);
+    tmp=ygroup*16;
+    for(i=0;i<16;i++) {
+      temp=p[tmp++];
+      LCD_WRITE_CHAR(temp);
+    }
+  }
+  LCD_WRITE_COMMAND(0x34);
+  LCD_WRITE_COMMAND(0x36);
+}
+
+void LCD_INIT() {
+  LCD_WRITE_COMMAND(0x30);
+  LCD_WRITE_COMMAND(0x0c);
+  LCD_WRITE_COMMAND(0x01);
+  LCD_WRITE_COMMAND(0x06);
+}
+
+void LCD_CLEAR() {  
+  LCD_WRITE_COMMAND(0x01);
+  HAL_Delay(1);
+}
 /* USER CODE END 0 */
 
 /**
@@ -92,9 +167,27 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
+  MX_TIM1_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_Base_Start(&htim1);
+  HAL_UART_Receive_IT(&huart3, RxTempBuf, 1);
 
+  HAL_Delay(50);
+  HAL_GPIO_WritePin(lcdRST_GPIO_Port, lcdRST_Pin, GPIO_PIN_RESET);
+  HAL_Delay(50);
+  HAL_GPIO_WritePin(lcdRST_GPIO_Port, lcdRST_Pin, GPIO_PIN_SET);
+
+  LCD_INIT();
+  HAL_Delay(100);
+
+  char msg[] = "Waiting Frame...";
+  for(int i=0;i<strlen(msg);i++) {
+    uint8_t _c = msg[i];
+    LCD_WRITE_CHAR(_c);
+  }
+  LCD_WRITE_COMMAND(0x0C);
+  HAL_Delay(500);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -104,6 +197,17 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    if(TRANS_FLAG == 0) {
+      HAL_Delay(1);
+      uint8_t _req[] = "REQ";
+      HAL_UART_Transmit(&huart3, _req, 3, 100);
+      TRANS_FLAG = 1;
+    }
+    if(TRANS_FLAG == 3) {
+      LCD_CLEAR();
+      DrawFullScreen(RxFRAME);
+      TRANS_FLAG = 0;
+    }
   }
   /* USER CODE END 3 */
 }
@@ -121,7 +225,7 @@ void SystemClock_Config(void)
   * in the RCC_OscInitTypeDef structure.
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -170,7 +274,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -182,6 +286,52 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 9-1;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 65535;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
 
 }
 
@@ -238,7 +388,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(LD0_GPIO_Port, LD0_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(lcdRST_GPIO_Port, lcdRST_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(lcdRST_GPIO_Port, lcdRST_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin : LD0_Pin */
   GPIO_InitStruct.Pin = LD0_Pin;
@@ -259,7 +409,32 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle) {
+  if(UartHandle->Instance == USART3) {
+    RxFRAME[cnt] = RxTempBuf[0];
+    cnt++;
 
+    if(cnt >= 1024) {
+      TRANS_FLAG = 2;
+    }
+
+    switch (TRANS_FLAG) {
+      case 1:
+        HAL_GPIO_WritePin(LD0_GPIO_Port, LD0_Pin, GPIO_PIN_RESET);
+        break;
+      
+      case 2:
+        HAL_GPIO_WritePin(LD0_GPIO_Port, LD0_Pin, GPIO_PIN_SET);
+        TRANS_FLAG = 3;
+        cnt = 0;
+        break;
+      
+      default:
+        break;
+    }
+    HAL_UART_Receive_IT(&huart3, RxTempBuf, 1);
+  }
+}
 /* USER CODE END 4 */
 
 /**
