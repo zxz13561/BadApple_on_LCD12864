@@ -14,6 +14,14 @@ MCU Board coding practice and coding language performance comparison
    - Note: LCD pixels response time is not fast enough, it has terrible image sticking.
    - The best display FPS is around ~10 FPS
 
+- ## Resource and Tools
+  - [Alstroemeria Records / Nomico - Bad Apple! (Image Sequence)](https://archive.org/details/bad_apple_is.7z)
+  - [image2cpp](https://javl.github.io/image2cpp/)
+  - [OpenOCD](https://openocd.org)
+  - [GNU Arm Embedded Toolchain](https://developer.arm.com/downloads/-/gnu-rm)
+  - [Using GCC with MinGW on VScode](https://code.visualstudio.com/docs/cpp/config-mingw)
+  - [Micropython](https://micropython.org)
+  
 - ## Basic Concept:
    - Send frame bytes from PC via UART, then MCU board show result
 ![BasicConcept.png](Document/Image/BasicConcept.png)
