@@ -12,4 +12,5 @@ MCU Board coding practice and coding language performance comparison
 | Pi Pico W | Micropython | Parallel | 8.x | Interlaced |
 
 - ## Basic Concept:
-   - a image here
+   - Send frame bytes from PC via UART, then MCU board show result
+![BasicConcept.png](Document/Image/BasicConcept.png)
