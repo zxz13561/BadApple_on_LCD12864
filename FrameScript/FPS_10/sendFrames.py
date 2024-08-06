@@ -47,25 +47,25 @@ while True:
         # Record time usage
         time_usage.append(perf_counter() - tmr)
         tmr = perf_counter()
-        # print(f"{datetime.now()} Get board message: {recv.decode()}")
+        print(f"{datetime.now()} Get board message: {recv.decode()}")
 
         # Select frame file by index
         if f_idx < range_list[1]:
             _f = file_list[0].all_frame[f_idx]
-        # elif f_idx < range_list[2]:
-        #     _f = file_list[1].all_frame[f_idx - range_list[1]]
-        # elif f_idx < range_list[3]:
-        #     _f = file_list[2].all_frame[f_idx - range_list[2]]
-        # elif f_idx < range_list[4]:
-        #     _f = file_list[3].all_frame[f_idx - range_list[3]]
-        # elif f_idx < range_list[5]:
-        #     _f = file_list[4].all_frame[f_idx - range_list[4]]
-        # elif f_idx < range_list[6]:
-        #     _f = file_list[5].all_frame[f_idx - range_list[5]]
-        # elif f_idx < range_list[7]:
-        #     _f = file_list[6].all_frame[f_idx - range_list[6]]
-        # elif f_idx < range_list[8]:
-        #     _f = file_list[7].all_frame[f_idx - range_list[7]]
+        elif f_idx < range_list[2]:
+            _f = file_list[1].all_frame[f_idx - range_list[1]]
+        elif f_idx < range_list[3]:
+            _f = file_list[2].all_frame[f_idx - range_list[2]]
+        elif f_idx < range_list[4]:
+            _f = file_list[3].all_frame[f_idx - range_list[3]]
+        elif f_idx < range_list[5]:
+            _f = file_list[4].all_frame[f_idx - range_list[4]]
+        elif f_idx < range_list[6]:
+            _f = file_list[5].all_frame[f_idx - range_list[5]]
+        elif f_idx < range_list[7]:
+            _f = file_list[6].all_frame[f_idx - range_list[6]]
+        elif f_idx < range_list[8]:
+            _f = file_list[7].all_frame[f_idx - range_list[7]]
         else:
             # Finish and break
             break
@@ -84,7 +84,7 @@ while True:
             ser.write(bytearray(_f))
 
         # Print out frame index number and start waiting next frame
-        # print(f"{datetime.now()} Send frame: {f_idx}")
+        print(f"{datetime.now()} Send frame: {f_idx}")
         f_idx += 1
 
 # Calculate FPS
