@@ -1,8 +1,15 @@
 # Bad Apple on LCD12864 module
-</br>
+MCU Board coding practice and coding language performance comparison
 
- - Working on ESP32
- - STM32F103 is done, but it need use uart to send frame
-## TODO:
- - STM32F103 w/ CubeMX document
- - ESP32 w/ Micropython development and document
+
+- ## TL; DR
+
+| Board | Code Lang. | LCD Mode | FPS | Scan Mode |
+|:-----:|:----------:|:--------:|:---:|:-----:|
+| STM32F103 | C/C++(HAL) | SPI | 10.3 | Progressive |
+| ESP32 | Micropython | SPI | 3.x | Progressive |
+| Pi Pico W | Micropython | Parallel | 4.x | Progressive |
+| Pi Pico W | Micropython | Parallel | 8.x | Interlaced |
+
+- ## Basic Concept:
+   - a image here
