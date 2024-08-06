@@ -1,4 +1,5 @@
 import time
+
 import micropython
 from machine import Pin, UART
 from LCD12864 import LCD12864Parallel
@@ -44,7 +45,8 @@ def main():
 
             # print(len(_recv))
             lcd.clean()
-            lcd.draw_frame()
+            lcd.draw_frame_progressive()
+            # lcd.draw_frame_interlaced()
             # time.sleep_ms(200)
             uart.write(b'REQ')
     print("Program stop")

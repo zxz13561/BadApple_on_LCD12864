@@ -133,7 +133,7 @@ class LCD12864Parallel(object):
         self.write_string(s)
 
     @micropython.viper
-    def draw_frame(self):
+    def draw_frame_interlaced(self):
         _buf = ptr8(self.draw_buf)
 
         _st = 0 if self.frame_odd else 1
@@ -160,3 +160,27 @@ class LCD12864Parallel(object):
             self.write_command(code3)
 
         self.frame_odd = not self.frame_odd
+
+    @micropython.viper
+    def draw_frame_progressive(self):
+        _buf = ptr8(self.draw_buf)
+        for y_line in range(64):
+            if y_line < 32:
+                x = 0x80
+                y = y_line + 0x80
+            else:
+                x = 0x88
+                y = y_line - 32 + 0x80
+
+            self.write_command(code3)
+            self.write_command(y)
+            self.write_command(x)
+            self.write_command(code1)
+
+            tmp = y_line * 16
+
+            for i in range(16):
+                self.parallel_write(1, 0, _buf[tmp + i])
+
+            self.write_command(code2)
+            self.write_command(code3)

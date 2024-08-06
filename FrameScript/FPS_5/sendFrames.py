@@ -15,7 +15,7 @@ board_type = board_list[1]
 
 # Init Serial
 # port = "/dev/tty.usbserial-1120"
-port = "COM9"
+port = "COM3"
 ser = serial.Serial(port, baudrate=230400, bytesize=8, parity=serial.PARITY_NONE, stopbits=1)
 
 # Setup index range
