@@ -1,25 +1,21 @@
 import time
 import machine
 from machine import Pin, UART
-from lib_LCD12864 import LCD12864, LCD12864_parallel
+from lib_LCD12864 import LCD12864
 
 uart = UART(2, 230400)
 
-# spi_lcd = machine.SPI(2,
-#                       baudrate=20_000_000,
-#                       polarity=0,
-#                       phase=0,
-#                       bits=8,
-#                       firstbit=machine.SPI.MSB,
-#                       sck=Pin(18),
-#                       mosi=Pin(23),
-#                       miso=Pin(19))
+spi_lcd = machine.SPI(2,
+                      baudrate=20_000_000,
+                      polarity=0,
+                      phase=0,
+                      bits=8,
+                      firstbit=machine.SPI.MSB,
+                      sck=Pin(18),
+                      mosi=Pin(23),
+                      miso=Pin(19))
 
-# lcd = LCD12864(spi_lcd, 22)
-lcd = LCD12864_parallel(23, 4, 18, 19, [32, 33, 25, 26, 27, 14, 22, 21])
-lcd.cursor_home()
-lcd.print_line("LCD ON")
-time.sleep(1)
+lcd = LCD12864(spi_lcd, 22)
 
 
 def datetime():
