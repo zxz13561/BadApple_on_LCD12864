@@ -3,6 +3,7 @@ MCU Board coding practice and coding language performance comparison
 
 
 - ## TL; DR
+[pre_view.mp4](Document/Video/pre_view.mp4)
 
 |   Board   | Code Lang.  | LCD Mode | Baud-rate |  Scan Mode  | Avg. FPS |
 |:---------:|:-----------:|:--------:|:---------:|:-----------:|:--------:|
