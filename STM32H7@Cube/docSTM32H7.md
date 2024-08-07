@@ -1,4 +1,4 @@
-# STM32F1 Project Setup Document
+# STM32H7 Project Setup Document
 
 - ## MCU Board
     - STM32 serial: **STM32H753ZI**

@@ -23,19 +23,26 @@ def datetime():
     return f"{_t[0]}-{_t[1]}-{_t[2]} {_t[3]}:{_t[4]}:{_t[5]}"
 
 
-if __name__ == '__main__':
+def main():
     print("Program Start")
 
+    _recv = bytearray(1024)
+    _tmr = time.time()
     uart.write(b'REQ')
-    while True:
-        if uart.any():
-            _recv = b''
-            while uart.any():
-                _recv += uart.readline()
-                time.sleep_ms(5)
 
-            print(len(_recv))
+    while time.time() - _tmr < 5:
+        if uart.any():
+            _tmr = time.time()
+            uart.readinto(_recv, 1024)
+
+            # print(len(_recv))
             lcd.clean()
             lcd.draw(_recv)
+            # lcd.draw_frame_interlaced()
             # time.sleep_ms(200)
             uart.write(b'REQ')
+    print("Program stop")
+
+
+if __name__ == '__main__':
+    main()

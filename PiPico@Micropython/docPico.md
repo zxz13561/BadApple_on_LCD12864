@@ -1,4 +1,4 @@
-# ESP32 Project Setup Document
+# Raspberry Pi Pico W Project Setup Document
 
 - ## MCU Board
     - ### NodeMCU-32S - ESP32
