@@ -3,8 +3,7 @@ MCU Board coding practice and coding language performance comparison
 
 
 - ## TL; DR
-[pre_view.mp4](Document/Video/pre_view.mp4)
-
+https://github.com/user-attachments/assets/ba5aada1-3278-419a-a1d0-6378688a10a3
 |   Board   | Code Lang.  | LCD Mode | Baud-rate |  Scan Mode  | Avg. FPS |
 |:---------:|:-----------:|:--------:|:---------:|:-----------:|:--------:|
 | STM32F103 | C/C++(HAL)  |   SPI    |  230400   | Progressive |   10.3   |
