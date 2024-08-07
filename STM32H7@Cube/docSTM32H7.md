@@ -3,6 +3,7 @@
 - ## MCU Board
     - STM32 serial: **STM32H753ZI**
     - It is almost same as H743 version
+      
     ![H7-Board.png](../Document/Image/H7-Board.png)
   
 - ## CubeMX Setup
@@ -58,7 +59,7 @@
     ```
     # Function by board type
     board_list = ["STM32F1", "other"]
-    board_type = board_list[0]
+    board_type = board_list[1]
     
     # Init Serial
     port = "COM3"
