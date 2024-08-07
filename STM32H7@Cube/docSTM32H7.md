@@ -1,46 +1,44 @@
 # STM32F1 Project Setup Document
 
 - ## MCU Board
-    - STM32 serial: **STM32F103C8T6**
-  
-    ![F1-Board.png](../Document/Image/F1-Board.png)
+    - STM32 serial: **STM32H753ZI**
+    - It is almost same as H743 version
+    ![H7-Board.png](../Document/Image/H7-Board.png)
   
 - ## CubeMX Setup
     - ### Select MCU by part No.
-      ![F1-MCU.png](../Document/Image/F1-MCU.png) 
+      ![H7-MCU.png](../Document/Image/H7-MCU.png) 
   
     - ### Clock Tree setup
       - #### Pinout & Configuration / System Core / RCC
-      ![F1-RCC.png](../Document/Image/F1-RCC.png) 
+      ![H7-RCC.png](../Document/Image/H7-RCC.png) 
       - #### Clock Configuration
-      ![F1-Clock.png](../Document/Image/F1-Clock.png)
-
-    - ### GPIOs
-      - #### LCD reset pin - PB6
-      ![F1-GPIO1.png](../Document/Image/F1-GPIO1.png)
-      - #### On board LED pin - PA8
-      ![F1-GPIO2.png](../Document/Image/F1-GPIO2.png)
+      ![H7-Clock.png](../Document/Image/H7-Clock.png)
   
     - ### TIM use channel 1
-      ![F1-TIM1.png](../Document/Image/F1-TIM1.png) 
+      ![H7-TIM.png](../Document/Image/H7-TIM.png) 
 
     - ### SPI use channel 1
-      ![F1-SPI.png](../Document/Image/F1-SPI.png)
-
+      ![H7-SPI.png](../Document/Image/H7-SPI.png)
+    
+    - ### Setup UART pins
+      ![H7-UART-Pin.png](../Document/Image/H7-UART-Pin.png)
+  
     - ### UART use channel 3
-      ![F1-UART.png](../Document/Image/F1-UART.png)
+      ![H7-UART.png](../Document/Image/H7-UART.png)
     
     - ### NVIC Setting
-      ![F1-NVIC.png](../Document/Image/F1-NVIC.png)
-    
-    - ### IC Pin setting overview
-      ![F1-IC.png](../Document/Image/F1-IC.png)
+      ![H7-NVIC.png](../Document/Image/H7-NVIC.png)
 
     - ### Final project setting. Use Makefile to generate project code
-      ![F1-Project.png](../Document/Image/F1-Project.png)
+      ![H7-Project.png](../Document/Image/H7-Project.png)
 
-- ## Connect to LCD
-  - ### TODO
+  - ## Wiring
+      - ### Connect w/ LCD
+      ![H7-LCD.png](../Document/Image/H7-LCD.png)
+
+      - ### Connect w/ PC
+      ![H7-PC.png](../Document/Image/H7-PC.png)
 
 - ## Build and download to board
     - ### Make sure you have required build environment
