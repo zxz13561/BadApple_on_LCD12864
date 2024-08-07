@@ -39,8 +39,12 @@
     - ### Final project setting. Use Makefile to generate project code
       ![F1-Project.png](../Document/Image/F1-Project.png)
 
-- ## Connect to LCD
-  - ### TODO
+- ## Wiring
+    - ### Connect w/ LCD
+    ![F1-LCD.png](../Document/Image/F1-LCD.png)
+
+    - ### Connect w/ PC
+    ![F1-PC.png](../Document/Image/F1-PC.png)
 
 - ## Build and download to board
     - ### Make sure you have required build environment
