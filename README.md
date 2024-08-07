@@ -15,6 +15,7 @@ MCU Board coding practice and coding language performance comparison
    - The best display FPS is around ~10 FPS
 
 - ## Resource and Tools
+  - [Mindplus-Destop - LCD12864RSPI Library](https://github.com/DFRobot/Mindplus-Desktop/blob/master/resource/tools/ArduinoUploader/Arduino/libraries/LCD12864RSPI/LCD12864RSPI.cpp)
   - [Alstroemeria Records / Nomico - Bad Apple! (Image Sequence)](https://archive.org/details/bad_apple_is.7z)
   - [image2cpp](https://javl.github.io/image2cpp/)
   - [OpenOCD](https://openocd.org)
@@ -23,10 +24,12 @@ MCU Board coding practice and coding language performance comparison
   - [Micropython](https://micropython.org)
   
 - ## Basic Concept:
-   - Send frame bytes from PC via UART, then MCU board show result
+   - **[Micropython]** Send frame bytes from PC via UART, then MCU board show result
 ![BasicConcept.png](Document/Image/BasicConcept.png)
+   - **[C/C++]** Board will keep waiting PC receive. Need to push reset pin, then restart program
 
 - ## Project setup documents
   - ### [STM32F1@Cube](STM32F1@Cube/docSTM32F1.md)
   - ### [STM32H7@Cube](STM32H7@Cube/docSTM32H7.md)
   - ### [ESP32@Micropython](ESP32@Micropython/docESP32.md)
+  - ### [PiPico@Micropython](PiPico@Micropython/docPico.md)

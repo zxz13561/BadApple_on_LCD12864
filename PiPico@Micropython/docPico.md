@@ -1,19 +1,20 @@
 # Raspberry Pi Pico W Project Setup Document
 
 - ## MCU Board
-    - ### NodeMCU-32S - ESP32
+    - ### Raspberry Pi Pico W 
   
-    ![ESP32-Board.png](../Document/Image/ESP32-Board.png)
+    ![Pico-Board.png](../Document/Image/Pico-Board.png)
   
 - ## Micropython
-  - ### Using esptool: [Download v1.22.1](https://micropython.org/download/ESP32_GENERIC/)
+  - ### [Download v1.22.1](https://micropython.org/download/RPI_PICO_W/)
 
 - ## Wiring
-    - ### Connect w/ LCD
-    ![ESP32-LCD.png](../Document/Image/ESP32-LCD.png)
+    - ### Connect w/ LCD (Parallel)
+     Note: Because my LCD module only can use 5V signal, but pi pico output is 3.3V. Need use open-drain gpio output and add a register for each pin.
+    ![Pico-LCD.png](../Document/Image/Pico-LCD.png)
 
     - ### Connect w/ PC
-    ![ESP32-PC.png](../Document/Image/ESP32-PC.png)
+    ![Pico-PC.png](../Document/Image/Pico-PC.png)
 
 
 - ## Flash python files to board
@@ -34,6 +35,23 @@
     port = "COM3"
     ser = serial.Serial(port, baudrate=230400, bytesize=8, parity=serial.PARITY_NONE, stopbits=1)
     ```
-   ### 3. Start python script
-   ### 4. Power on your board
-   ### 5. 🎉 You can see Bad apple on LCD!!! 🎉
+   ### 3. Select progressive or interlaced mode output
+   ```
+      while time.time() - _tmr < 5:
+        if uart.any():
+            _tmr = time.time()
+            uart.readinto(lcd.draw_buf, 1024)
+
+            # print(len(_recv))
+            lcd.clean()
+  
+            lcd.draw_frame_progressive()  # <--- This is progressive mode
+            # lcd.draw_frame_interlaced() # <--- This is interlaced mode
+  
+            # time.sleep_ms(200)
+            uart.write(b'REQ')
+    print("Program stop")
+   ```
+   ### 4. Start python script
+   ### 5. Power on your board
+   ### 6. 🎉 You can see Bad apple on LCD!!! 🎉
