@@ -25,3 +25,6 @@ MCU Board coding practice and coding language performance comparison
 - ## Basic Concept:
    - Send frame bytes from PC via UART, then MCU board show result
 ![BasicConcept.png](Document/Image/BasicConcept.png)
+
+- ## Board project document
+  - [STM32F1@Cube](STM32F1@Cube/docSTM32F1.md)

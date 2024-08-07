@@ -10,11 +10,10 @@ import hex_arr5
 import hex_arr6
 
 # Function by board type
-board_list = ["STM32F1", "ESP32"]
+board_list = ["STM32F1", "other"]
 board_type = board_list[1]
 
 # Init Serial
-# port = "/dev/tty.usbserial-1120"
 port = "COM3"
 ser = serial.Serial(port, baudrate=230400, bytesize=8, parity=serial.PARITY_NONE, stopbits=1)
 
